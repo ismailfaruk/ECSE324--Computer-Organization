@@ -1,41 +1,97 @@
+
+C:/Users/ifaruk/Downloads/ECSE 324/G39_Lab1/sort.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
 			.text
 			.global _start
 
 _start:
 			LDR R4, =RESULT		// R4 points to the result location
+   0:	e59f4088 	ldr	r4, [pc, #136]	; 90 <NUMBERS+0x1c>
 			LDR R6, [R4, #4]	// R6 holds the number of elements in the list
+   4:	e5946004 	ldr	r6, [r4, #4]
+
+00000008 <LOOP_ONE>:
 				
 LOOP_ONE:	MOV R7, R6		 	// R7 holds loop couner for LOOP_TWO
+   8:	e1a07006 	mov	r7, r6
 			SUBS R6, R6, #1		// decrement the loop counter of LOOP_ONE
+   c:	e2566001 	subs	r6, r6, #1
 			BEQ END				// end loop if counter has reached 0
+  10:	0a000014 	beq	68 <END>
 			ADD R3, R4, #8		// R3 points to the first number
+  14:	e2843008 	add	r3, r4, #8
 			LDR R0, [R3]		// R0 holds the first number in the list
+  18:	e5930000 	ldr	r0, [r3]
 			ADD R5, R4, #12		// R5 points to second number
+  1c:	e284500c 	add	r5, r4, #12
 			LDR R1, [R5]		// R1 holds second number in the list
+  20:	e5951000 	ldr	r1, [r5]
+
 			B LOOP_TWO			// branch to LOOP_TWO
+  24:	eaffffff 	b	28 <LOOP_TWO>
+
+00000028 <LOOP_TWO>:
 			
 LOOP_TWO:	SUBS R7, R7, #1		// decrement current loop length
+  28:	e2577001 	subs	r7, r7, #1
 			BEQ LOOP_ONE		// end loop if counter has reached 0
+  2c:	0afffff5 	beq	8 <LOOP_ONE>
 			CMP R1, R0			// check if R1 is less than the R0
+  30:	e1510000 	cmp	r1, r0
 			BLT SWAP			// branch to SWAP if R1 is less than R0
+  34:	ba000000 	blt	3c <SWAP>
 			B SHIFT				// branch to SHIFT
+  38:	ea000005 	b	54 <SHIFT>
+
+0000003c <SWAP>:
 			
 SWAP:		MOV R9, R1			// R9 holds content in R1	
+  3c:	e1a09001 	mov	r9, r1
 			MOV R1, R0			// R1 holds content in R0	
+  40:	e1a01000 	mov	r1, r0
 			MOV R0, R9			// R0 holds data in R9, swapped data in R1 and R0	
+  44:	e1a00009 	mov	r0, r9
 			STR R0, [R3]		// store R0 in the location R3 is pointing to
+  48:	e5830000 	str	r0, [r3]
 			STR R1, [R5]		// store R1 in the location R5 is pointing to	
+  4c:	e5851000 	str	r1, [r5]
 			B SHIFT				// branch to SHIFT
+  50:	eaffffff 	b	54 <SHIFT>
+
+00000054 <SHIFT>:
 
 SHIFT:		ADD R3, R3, #4		// R3 points to the next number	
+  54:	e2833004 	add	r3, r3, #4
 			LDR R0, [R3]		// R0 holds the number R3 is now pointing to
+  58:	e5930000 	ldr	r0, [r3]
 			ADD R5, R5, #4		// R5 points to the next number
+  5c:	e2855004 	add	r5, r5, #4
 			LDR R1, [R5]		// R1 holds the number R5 is now pointing to  	
+  60:	e5951000 	ldr	r1, [r5]
 			B LOOP_TWO			// branch to LOOP_TWO
+  64:	eaffffef 	b	28 <LOOP_TWO>
+
+00000068 <END>:
 
 END: 		B END				// infinite loop!
+  68:	eafffffe 	b	68 <END>
 
-RESULT:		.word	0			// memory assigned for result location
-N:			.word	7			// number of entries in the list
-NUMBERS:	.word	4, 5, 3, 6	// the list data
-			.word	1, 8, 2 
+0000006c <RESULT>:
+  6c:	00000000 	.word	0x00000000
+
+00000070 <N>:
+  70:	00000007 	.word	0x00000007
+
+00000074 <NUMBERS>:
+  74:	00000004 	.word	0x00000004
+  78:	00000005 	.word	0x00000005
+  7c:	00000003 	.word	0x00000003
+  80:	00000006 	.word	0x00000006
+  84:	00000001 	.word	0x00000001
+  88:	00000008 	.word	0x00000008
+  8c:	00000002 	.word	0x00000002
+  90:	0000006c 	.word	0x0000006c

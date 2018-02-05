@@ -13,11 +13,11 @@ _start:
 			MOV R10, #1				// R6 now holds a numerical 1, to compare with dividend
 			MOV R11, #0				// R7 now holds a numerical 0, to find right shift 
 
-TOTAL:		SUBS R2, R2, #1			// decrement the loop counter
-			BEQ DIVIDEND			// end loop if counter has reached 0
+TOTAL:		SUBS R2, R2, #1			// decrement the loop counter	
+			BEQ DIVIDEND			// end loop if counter has reached 0	
 			ADD R3, R3, #4			// R3 points to next number in the list
 			LDR R1, [R3]			// R1 holds the next number in the list
-			ADD R0, R0, R1			// add number in R0 and R1, store to R0 as total
+			ADD R0, R0, R1			// add number in R0 and R1, store to R0 as total	
 			B TOTAL					// branch back to the loop
 
 DIVIDEND:	CMP R10, R9				// compare if R6 = R9
@@ -26,12 +26,12 @@ DIVIDEND:	CMP R10, R9				// compare if R6 = R9
 			LSL R10, R10, #1		// Shift R10 by one to the left
 			B DIVIDEND				// Repeat
 
-AVERAGE:	LSR R5, R5, #1			// Shift total to the right by one
+AVERAGE:	ASR R0, R0, #1			// Shift total to the right by one
 			SUBS R11, R11, #1 		// decrement the loop counter
 			BEQ SUBTRACT			// If R7 is zero leave loop
 			B AVERAGE				// Else repeat
 
-SUBTRACT:	SUBS R8, R8, R5			// subtraction of average from signal
+SUBTRACT:	SUBS R8, R8, R0			// subtraction of average from signal
 			STR R8, [R7]			// stores R8(centered value) to R7(address)
 			SUBS R6, R6, #1			// decrement the loop counter
 			BEQ END					// end loop if counter has reached 0
@@ -39,7 +39,7 @@ SUBTRACT:	SUBS R8, R8, R5			// subtraction of average from signal
 			LDR R8, [R7]			// R1 holds the next number in the list	
 			B SUBTRACT	
 
-END:		B END				// infinite loop!
+END:		B END					// infinite loop!
 
 RESULT:		.word	0				// memory assigned for result location
 N:			.word	8				// number of entries in the list

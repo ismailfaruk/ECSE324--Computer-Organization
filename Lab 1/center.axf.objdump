@@ -1,0 +1,109 @@
+
+C:/Users/ifaruk/Downloads/ECSE 324/G39_Lab1/center.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+			.text
+			.global _start
+
+_start:
+			LDR R4, =RESULT			// R4 points to result
+   0:	e59f40a4 	ldr	r4, [pc, #164]	; ac <NUMBERS+0x20>
+			LDR R2, [R4, #4]		// R2 holds number of elements in list
+   4:	e5942004 	ldr	r2, [r4, #4]
+			LDR R6, [R4, #4]		// R6 holds number of elements in list
+   8:	e5946004 	ldr	r6, [r4, #4]
+			LDR R9, [R4, #4]		// R6 holds number of elements in list
+   c:	e5949004 	ldr	r9, [r4, #4]
+			ADD R3, R4, #8			// R3 points to the first number
+  10:	e2843008 	add	r3, r4, #8
+			ADD R7, R4, #8			// R7 points to the first number
+  14:	e2847008 	add	r7, r4, #8
+			LDR R0, [R3]			// R0 holds first number in the list
+  18:	e5930000 	ldr	r0, [r3]
+			LDR R8, [R7]			// R8 holds first number in the list
+  1c:	e5978000 	ldr	r8, [r7]
+			MOV R10, #1				// R6 now holds a numerical 1, to compare with dividend
+  20:	e3a0a001 	mov	r10, #1
+			MOV R11, #0				// R7 now holds a numerical 0, to find right shift 
+  24:	e3a0b000 	mov	r11, #0
+
+00000028 <TOTAL>:
+
+TOTAL:		SUBS R2, R2, #1			// decrement the loop counter	
+  28:	e2522001 	subs	r2, r2, #1
+			BEQ DIVIDEND			// end loop if counter has reached 0	
+  2c:	0a000003 	beq	40 <DIVIDEND>
+			ADD R3, R3, #4			// R3 points to next number in the list
+  30:	e2833004 	add	r3, r3, #4
+			LDR R1, [R3]			// R1 holds the next number in the list
+  34:	e5931000 	ldr	r1, [r3]
+			ADD R0, R0, R1			// add number in R0 and R1, store to R0 as total	
+  38:	e0800001 	add	r0, r0, r1
+			B TOTAL					// branch back to the loop
+  3c:	eafffff9 	b	28 <TOTAL>
+
+00000040 <DIVIDEND>:
+
+DIVIDEND:	CMP R10, R9				// compare if R6 = R9
+  40:	e15a0009 	cmp	r10, r9
+			BEQ AVERAGE				// end dividend if R6 = R9
+  44:	0a000002 	beq	54 <AVERAGE>
+			ADD R11, R11, #1		// Add value one to R7
+  48:	e28bb001 	add	r11, r11, #1
+			LSL R10, R10, #1		// Shift R10 by one to the left
+  4c:	e1a0a08a 	lsl	r10, r10, #1
+			B DIVIDEND				// Repeat
+  50:	eafffffa 	b	40 <DIVIDEND>
+
+00000054 <AVERAGE>:
+
+AVERAGE:	ASR R0, R0, #1			// Shift total to the right by one
+  54:	e1a000c0 	asr	r0, r0, #1
+			SUBS R11, R11, #1 		// decrement the loop counter
+  58:	e25bb001 	subs	r11, r11, #1
+			BEQ SUBTRACT			// If R7 is zero leave loop
+  5c:	0a000000 	beq	64 <SUBTRACT>
+			B AVERAGE				// Else repeat
+  60:	eafffffb 	b	54 <AVERAGE>
+
+00000064 <SUBTRACT>:
+
+SUBTRACT:	SUBS R8, R8, R0			// subtraction of average from signal
+  64:	e0588000 	subs	r8, r8, r0
+			STR R8, [R7]			// stores R8(centered value) to R7(address)
+  68:	e5878000 	str	r8, [r7]
+			SUBS R6, R6, #1			// decrement the loop counter
+  6c:	e2566001 	subs	r6, r6, #1
+			BEQ END					// end loop if counter has reached 0
+  70:	0a000002 	beq	80 <END>
+			ADD R7, R7, #4			// R7 points to next number in the list
+  74:	e2877004 	add	r7, r7, #4
+			LDR R8, [R7]			// R1 holds the next number in the list	
+  78:	e5978000 	ldr	r8, [r7]
+			B SUBTRACT	
+  7c:	eafffff8 	b	64 <SUBTRACT>
+
+00000080 <END>:
+
+END:		B END				// infinite loop!
+  80:	eafffffe 	b	80 <END>
+
+00000084 <RESULT>:
+  84:	00000000 	.word	0x00000000
+
+00000088 <N>:
+  88:	00000008 	.word	0x00000008
+
+0000008c <NUMBERS>:
+  8c:	00000004 	.word	0x00000004
+  90:	00000005 	.word	0x00000005
+  94:	00000003 	.word	0x00000003
+  98:	00000006 	.word	0x00000006
+  9c:	00000001 	.word	0x00000001
+  a0:	00000008 	.word	0x00000008
+  a4:	00000002 	.word	0x00000002
+  a8:	00000009 	.word	0x00000009
+  ac:	00000084 	.word	0x00000084

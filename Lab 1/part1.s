@@ -1,5 +1,5 @@
 			.text
-			.global_start
+			.global _start
 
 _start:
 			LDR R4, =RESULT		// R4 points to the result location
