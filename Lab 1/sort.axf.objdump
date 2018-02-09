@@ -30,7 +30,6 @@ LOOP_ONE:	MOV R7, R6		 	// R7 holds loop couner for LOOP_TWO
   1c:	e284500c 	add	r5, r4, #12
 			LDR R1, [R5]		// R1 holds second number in the list
   20:	e5951000 	ldr	r1, [r5]
-
 			B LOOP_TWO			// branch to LOOP_TWO
   24:	eaffffff 	b	28 <LOOP_TWO>
 

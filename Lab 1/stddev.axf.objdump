@@ -10,10 +10,10 @@ Disassembly of section .text:
 
 _start:
 			LDR R4, =RESULT		// R4 points to the result location
-   0:	e59f406c 	ldr	r4, [pc, #108]	; 74 <NUMBERS+0x1c>
+   0:	e59f4070 	ldr	r4, [pc, #112]	; 78 <NUMBERS+0x1c>
 			LDR R2, [R4, #4]	// R2 holds the number of elements in the list
    4:	e5942004 	ldr	r2, [r4, #4]
-			ADD R3, R4, #8		// R3 poins to the first number
+			ADD R3, R4, #8		// R3 points to the first number
    8:	e2843008 	add	r3, r4, #8
 			LDR R0, [R3]		// R0 holds the first number in the list, starting min
    c:	e5930000 	ldr	r0, [r3]
@@ -54,26 +54,28 @@ Min:		MOV R0, R1			// if yes, update minimum value
 
 DONE:		SUBS R6, R5, R0		// substraction, max - min
   44:	e0556000 	subs	r6, r5, r0
-			LSR R4, R6, #2 		// divide by 4
-  48:	e1a04126 	lsr	r4, r6, #2
+			LSR R7, R6, #2 		// divide by 4
+  48:	e1a07126 	lsr	r7, r6, #2
+			STR R7, [R4]		// store R7 in R4
+  4c:	e5847000 	str	r7, [r4]
 
-0000004c <END>:
+00000050 <END>:
 
 END:		B END				// infinite loop!
-  4c:	eafffffe 	b	4c <END>
+  50:	eafffffe 	b	50 <END>
 
-00000050 <RESULT>:
-  50:	00000000 	.word	0x00000000
+00000054 <RESULT>:
+  54:	00000000 	.word	0x00000000
 
-00000054 <N>:
-  54:	00000007 	.word	0x00000007
+00000058 <N>:
+  58:	00000007 	.word	0x00000007
 
-00000058 <NUMBERS>:
-  58:	00000004 	.word	0x00000004
-  5c:	00000005 	.word	0x00000005
-  60:	00000003 	.word	0x00000003
-  64:	00000006 	.word	0x00000006
-  68:	00000001 	.word	0x00000001
-  6c:	00000008 	.word	0x00000008
-  70:	00000002 	.word	0x00000002
-  74:	00000050 	.word	0x00000050
+0000005c <NUMBERS>:
+  5c:	00000004 	.word	0x00000004
+  60:	00000005 	.word	0x00000005
+  64:	00000003 	.word	0x00000003
+  68:	00000006 	.word	0x00000006
+  6c:	00000001 	.word	0x00000001
+  70:	00000008 	.word	0x00000008
+  74:	00000002 	.word	0x00000002
+  78:	00000054 	.word	0x00000054

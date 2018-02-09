@@ -23,7 +23,8 @@ Min:		MOV R0, R1			// if yes, update minimum value
 			B LOOP				// branch to Loop
 
 DONE:		SUBS R6, R5, R0		// substraction, max - min
-			LSR R4, R6, #2 		// divide by 4
+			LSR R7, R6, #2 		// divide by 4
+			STR R7, [R4]		// store R7 in R4
 
 END:		B END				// infinite loop!
 
