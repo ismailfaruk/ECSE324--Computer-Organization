@@ -1,0 +1,39 @@
+
+C:/Users/ifaruk/Downloads/ECSE 324/G39_Lab2/stack.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+            .text
+            .global _start
+
+_start:
+            MOV R0, #0x00000001     // move an identifiable value into R0
+   0:	e3a00001 	mov	r0, #1
+            MOV R1, #0x00000002     // move an identifiable value into R1
+   4:	e3a01002 	mov	r1, #2
+            MOV R2, #0x00000003     // move an identifiable value into R2
+   8:	e3a02003 	mov	r2, #3
+
+0000000c <STACK_PUSH>:
+
+STACK_PUSH:
+            STMDB SP!, {R0}         // push R0 onto the stack
+   c:	e92d0001 	stmfd	sp!, {r0}
+            STMDB SP!, {R1}         // push R1 onto the stack
+  10:	e92d0002 	stmfd	sp!, {r1}
+            STMDB SP!, {R2}         // push R2 onto the stack
+  14:	e92d0004 	stmfd	sp!, {r2}
+
+00000018 <STACK_POP>:
+
+STACK_POP:
+            LDMIA SP!, {R0 - R2}    // POP {R0 - R2}
+  18:	e8bd0007 	pop	{r0, r1, r2}
+
+0000001c <END>:
+
+END:
+            B END                   // infinite loop!
+  1c:	eafffffe 	b	1c <END>

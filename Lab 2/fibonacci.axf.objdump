@@ -1,0 +1,84 @@
+
+C:/Users/ifaruk/Downloads/ECSE 324/G39_Lab2/fibonacci.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+            .text
+            .global _start
+            .global _main
+
+_start:		LDR R4, =RESULT			// R4 points to the result location
+   0:	e59f4060 	ldr	r4, [pc, #96]	; 68 <N+0x4>
+			LDR R3, [R4, #4]		// R2 holds the fibonacci number to compute
+   4:	e5943004 	ldr	r3, [r4, #4]
+
+00000008 <_main>:
+
+_main:		BL FIB                  // call the FIB subroutine
+   8:	eb000001 	bl	14 <FIB>
+            STR R0, [R4]            // store the return value in memory
+   c:	e5840000 	str	r0, [r4]
+            B END                   // branch to END
+  10:	ea000011 	b	5c <END>
+
+00000014 <FIB>:
+
+FIB:		STMDB SP!, {R1, R2}     // save the values of R1 and R2 on the stack
+  14:	e92d0006 	push	{r1, r2}
+            CMP R3, #2              // compare R0 to 2 (i.e. base case)
+  18:	e3530002 	cmp	r3, #2
+            BGE RECUR               // jump to our recursion instructions if R0 is not less than 2
+  1c:	aa000001 	bge	28 <RECUR>
+
+00000020 <BASE>:
+
+BASE:		MOV R0, #1              // move 1 into R0
+  20:	e3a00001 	mov	r0, #1
+            B DONE                  // jump to DONE
+  24:	ea00000a 	b	54 <DONE>
+
+00000028 <RECUR>:
+
+RECUR:		STMDB SP!, {R3, LR}     // save the values of R3 and LR on the stack
+  28:	e92d4008 	push	{r3, lr}
+            SUB R3, R3, #1          // subtract 1 from R3
+  2c:	e2433001 	sub	r3, r3, #1
+            BL FIB                  // call the FIB subroutine Fib(n - 1)
+  30:	ebfffff7 	bl	14 <FIB>
+            MOV R1, R0              // move the return value R0 to R1
+  34:	e1a01000 	mov	r1, r0
+            LDMIA SP!, {R3, LR}     // pop the values of R3 and LR off the stack
+  38:	e8bd4008 	pop	{r3, lr}
+            STMDB SP!, {R3, LR}     // save the values of R3 and LR on the stack
+  3c:	e92d4008 	push	{r3, lr}
+            SUB R3, R3, #2          // subtract 2 from R3
+  40:	e2433002 	sub	r3, r3, #2
+            BL FIB                  // call the FIB subroutine Fib(n - 2)
+  44:	ebfffff2 	bl	14 <FIB>
+            MOV R2, R0              // move the return value R0 to R5
+  48:	e1a02000 	mov	r2, r0
+            LDMIA SP!, {R3, LR}     // pop the values of R0 and LR off the stack
+  4c:	e8bd4008 	pop	{r3, lr}
+            ADD R0, R1, R2          // add R1 and R2 and store the result in R0
+  50:	e0810002 	add	r0, r1, r2
+
+00000054 <DONE>:
+
+DONE:		LDMIA SP!, {R1, R2}     // pop the values of R1 and R2 off the stack
+  54:	e8bd0006 	pop	{r1, r2}
+            BX LR                   // return
+  58:	e12fff1e 	bx	lr
+
+0000005c <END>:
+
+END:		B END                   // infinite loop!
+  5c:	eafffffe 	b	5c <END>
+
+00000060 <RESULT>:
+  60:	00000000 	.word	0x00000000
+
+00000064 <N>:
+  64:	00000005 	.word	0x00000005
+  68:	00000060 	.word	0x00000060

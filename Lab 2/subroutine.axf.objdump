@@ -1,0 +1,79 @@
+
+C:/Users/ifaruk/Downloads/ECSE 324/G39_Lab2/subroutine.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+            .text
+            .global _start
+
+_start:
+			LDR R4, =RESULT			// R4 points to the result location
+   0:	e59f406c 	ldr	r4, [pc, #108]	; 74 <NUMBERS+0x1c>
+			LDR R2, [R4, #4]		// R2 holds the number of elements in the list
+   4:	e5942004 	ldr	r2, [r4, #4]
+			ADD R3, R4, #8			// R3 poins to the first number
+   8:	e2843008 	add	r3, r4, #8
+            STMDB SP!, {R2, R3}     // push R2 and R3 onto the stack
+   c:	e92d000c 	push	{r2, r3}
+            BL MAX                  // call the MAX subroutine
+  10:	eb000002 	bl	20 <MAX>
+            STR R0, [R4]            // store the return value in memory
+  14:	e5840000 	str	r0, [r4]
+            LDMIA SP!, {R0-R3}		// pop R0 and R1 off the stack
+  18:	e8bd000f 	pop	{r0, r1, r2, r3}
+            B END                   // jump to END
+  1c:	ea00000a 	b	4c <END>
+
+00000020 <MAX>:
+
+MAX:		STMDB SP!, {R0, R1}     // save registers R0 and R1 on the stack
+  20:	e92d0003 	push	{r0, r1}
+            LDR R0, [R3]			// R0 holds the first number in the list
+  24:	e5930000 	ldr	r0, [r3]
+
+00000028 <LOOP>:
+
+LOOP:		SUBS R2, R2, #1			// decrement the loop counter
+  28:	e2522001 	subs	r2, r2, #1
+			BEQ DONE				// end loop if counter has reached 0
+  2c:	0a000005 	beq	48 <DONE>
+			ADD R3, R3, #4			// R3 points to next number in the list
+  30:	e2833004 	add	r3, r3, #4
+			LDR R1, [R3]			// R1 holds the next number in the list
+  34:	e5931000 	ldr	r1, [r3]
+			CMP R0, R1				// check if it is greater than the maximum
+  38:	e1500001 	cmp	r0, r1
+			BGE LOOP				// if no, branch back to the loop
+  3c:	aafffff9 	bge	28 <LOOP>
+			MOV R0, R1				// if yes, update the curent max
+  40:	e1a00001 	mov	r0, r1
+			B LOOP					// branch back to the loop
+  44:	eafffff7 	b	28 <LOOP>
+
+00000048 <DONE>:
+
+DONE:		BX LR 					// return to line 10
+  48:	e12fff1e 	bx	lr
+
+0000004c <END>:
+
+END:		B END                   // infinite loop!
+  4c:	eafffffe 	b	4c <END>
+
+00000050 <RESULT>:
+  50:	00000000 	.word	0x00000000
+
+00000054 <N>:
+  54:	00000007 	.word	0x00000007
+
+00000058 <NUMBERS>:
+  58:	00000004 	.word	0x00000004
+  5c:	00000005 	.word	0x00000005
+  60:	00000003 	.word	0x00000003
+  64:	00000006 	.word	0x00000006
+  68:	00000001 	.word	0x00000001
+  6c:	00000008 	.word	0x00000008
+  70:	00000002 	.word	0x00000002
+  74:	00000050 	.word	0x00000050
