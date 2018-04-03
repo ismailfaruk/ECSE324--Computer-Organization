@@ -7,5 +7,6 @@ int main() {
 	while(1) {
 		write_LEDs_ASM(read_slider_switches_ASM());
 	}
+	
 	return 0;
 }	

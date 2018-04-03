@@ -142,7 +142,7 @@ READ_INT:
 	LDR R3, =HPS_TIM_BASE
 	LDR R3, [R3, R1, LSL #2]
 	LDR R3, [R3, #0x10]
-	AND R3, R3, 0x1
+	AND R3, R3, #0x1
 	EOR R4, R4, R3
 	BX LR
 	

@@ -1,16 +1,18 @@
 //
-// stopwatch.c
+// stopwatch_int.c
 //
 
 
 
-#include "../../inc/pushbuttons.h"
 #include "../../inc/HEX_displays.h"
 #include "../../inc/HPS_TIM.h"
+#include "../../inc/ISRs.h"
+#include "../../inc/int_setup.h"
+#include "../../inc/pushbuttons.h"
 
 
 
-int program_stopwatch(void)
+int program_stopwatch_with_interrupts(void)
 {
     enum _stopwatch_state
     {
@@ -20,32 +22,23 @@ int program_stopwatch(void)
 
     enum _stopwatch_state state = STOPPED;
 
-    int edgecap = 0;
-
     int minutes = 0;
     int seconds = 0;
     int ds = 0;
 
+    // Setups ISRs for FPGA Pushbutton KEYs and HPS Timer 0.
+    int_setup(2, (int[]){ 73, 199 });
+
     HPS_TIM_config_t hps_tim0;
-    HPS_TIM_config_t hps_tim1;
 
     hps_tim0.tim = TIM0;
     hps_tim0.timeout = 10000;
     hps_tim0.LD_en = 1;
-    hps_tim0.INT_en = 1;
+    hps_tim0.INT_en = 0;
     hps_tim0.enable = 1;
 
     // Configure the stopwatch timer.
     HPS_TIM_config_ASM(&hps_tim0);
-
-    hps_tim1.tim = TIM1;
-    hps_tim1.timeout = 5000;
-    hps_tim1.LD_en = 1;
-    hps_tim1.INT_en = 1;
-    hps_tim1.enable = 1;
-
-    // Configure the pushbutton timer.
-    HPS_TIM_config_ASM(&hps_tim1);
 
     // Enable pushbutton interrupts (i.e. so that we can read from edgecapture register).
     enable_PB_INT_ASM(PB0 | PB1 | PB2 | PB3);
@@ -56,52 +49,44 @@ int program_stopwatch(void)
     // Loop forever.
     while (1)
     {
-        // Check if the pushbutton timer has finished.
-        if (HPS_TIM_read_INT_ASM(TIM1))
+        if (fpga_pb_key0_flag)
         {
-            // Reset the pushbutton timer.
-            HPS_TIM_clear_INT_ASM(TIM1);
+            fpga_pb_key0_flag = 0;
 
-            // Read which buttons have been pushed since the last read.
-            edgecap = read_PB_edgecap_ASM();
+            // Start the stopwatch.
+            state = STARTED;
+        }
+        if (fpga_pb_key1_flag)
+        {
+            fpga_pb_key1_flag = 0;
 
-            // Clear pushbutton edgecapture register.
-            PB_clear_edgecap_ASM(PB0 | PB1 | PB2 | PB3);
+            // Stop the stopwatch.
+            state = STOPPED;
+        }
+        if (fpga_pb_key2_flag)
+        {
+            fpga_pb_key2_flag = 0;
 
-            if (edgecap & PB0)
+            // Redraw the display here if the stopwatch is stopped.
+            if (state == STOPPED)
             {
-                // Start the stopwatch.
-                state = STARTED;
+                // Display stopwatch time of 00:00:00.
+                HEX_write_ASM(HEX0 | HEX1 | HEX2 | HEX3 | HEX4 | HEX5, 0);
             }
-            if (edgecap & PB1)
-            {
-                // Stop the stopwatch.
-                state = STOPPED;
-            }
-            if (edgecap & PB2)
-            {
-                // Redraw the display here if the stopwatch is stopped.
-                if (state == STOPPED)
-                {
-                    // Display stopwatch time of 00:00:00.
-                    HEX_write_ASM(HEX0 | HEX1 | HEX2 | HEX3 | HEX4 | HEX5, 0);
-                }
 
-                // Reset the stopwatch.
-                minutes = 0;
-                seconds = 0;
-                ds = 0;
-            }
+            // Reset the stopwatch.
+            minutes = 0;
+            seconds = 0;
+            ds = 0;
         }
 
         switch (state)
         {
             case STARTED:
                 // Check if the stopwatch timer has finished.
-                if (HPS_TIM_read_INT_ASM(TIM0))
+                if (hps_tim0_int_flag)
                 {
-                    // Reset the stopwatch timer.
-                    HPS_TIM_clear_INT_ASM(TIM0);
+                    hps_tim0_int_flag = 0;
 
                     // Print the current elapsed time to the HEX display.
                     HEX_write_ASM(HEX0, ds % 10);

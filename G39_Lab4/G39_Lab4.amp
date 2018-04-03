@@ -10,21 +10,17 @@
     <program>
         <type>C Program</type>
         <source_files>
-            <source_file filepath="true">drivers/asm/HEX_displays.s</source_file>
-            <source_file filepath="true">drivers/inc/HEX_displays.h</source_file>
-            <source_file filepath="true">drivers/asm/HPS_TIM.s</source_file>
-            <source_file filepath="true">drivers/asm/ISRs.s</source_file>
-            <source_file filepath="true">drivers/inc/HPS_TIM.h</source_file>
-            <source_file filepath="true">drivers/inc/ISRs.h</source_file>
-            <source_file filepath="true">drivers/inc/address_map_arm.h</source_file>
-            <source_file filepath="true">drivers/inc/int_setup.h</source_file>
+            <source_file filepath="true">ps2_keyboard.c</source_file>
+            <source_file filepath="true">drivers/asm/vga.s</source_file>
+            <source_file filepath="true">drivers/inc/vga.h</source_file>
+            <source_file filepath="true">drivers/inc/ps2_keyboard.h</source_file>
+            <source_file filepath="true">drivers/asm/ps2_keyboard.s</source_file>
+            <source_file filepath="true">drivers/inc/slider_switches.h</source_file>
+            <source_file filepath="true">drivers/asm/slider_switches.s</source_file>
+            <source_file filepath="true">drivers/inc/audio.h</source_file>
+            <source_file filepath="true">drivers/asm/audio.s</source_file>
             <source_file filepath="true">drivers/asm/pushbuttons.s</source_file>
             <source_file filepath="true">drivers/inc/pushbuttons.h</source_file>
-            <source_file filepath="true">drivers/asm/LEDs.s</source_file>
-            <source_file filepath="true">drivers/asm/slider_switches.s</source_file>
-            <source_file filepath="true">drivers/inc/LEDs.h</source_file>
-            <source_file filepath="true">interrupt_stopwatch.c</source_file>
-            <source_file filepath="true">drivers/src/int_setup.c</source_file>
         </source_files>
         <options>
             <compiler_flags>-g -O0</compiler_flags>

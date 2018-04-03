@@ -1,6 +1,12 @@
 #ifndef _ISRS
 #define _ISRS
 
+	extern volatile int hps_tim0_int_flag;
+	extern volatile int fpga_pb_key0_int_flag;
+	extern volatile int fpga_pb_key1_int_flag;
+	extern volatile int fpga_pb_key2_int_flag;
+	extern volatile int fpga_pb_key3_int_flag;
+	
 	extern void A9_PRIV_TIM_ISR();
 	extern void HPS_GPIO1_ISR();
 	extern void HPS_TIM0_ISR();

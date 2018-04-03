@@ -6,123 +6,75 @@
             .global HEX_write_ASM
 
 HEX_clear_ASM:
-            MOV     R1, #0x00           // R1 holds 0x00 to clear the display to 0
-            PUSH    {LR}                // save the value of LR
-            BL      _HEX_impl           // jump to _HEX_impl
-            POP     {LR}                // restore the value of LR
-            BX      LR                  // jump to LR
+			MOV 	R2, #6	//loop counter
+			MOV 	R4, #1	//bit identifier
+			LDR		R6, =HEX0_3_BASE
+			LDR 	R7, =HEX4_5_BASE
+			MOV		R3, #0x00
+			PUSH	{LR}        
+			B		Flag                
 
 HEX_flood_ASM:
-            MOV     R1, #0x7F           // R1 holds 0x7F to clear the display to 1
-            PUSH    {LR}                // save the value of LR
-            BL      _HEX_impl           // jump to _HEX_impl
-            POP     {LR}                // restore the value of LR
-            BX      LR                  // jump to LR
-
+			MOV 	R2, #6	//loop counter
+			MOV 	R4, #1	//bit identifier
+			LDR		R6, =HEX0_3_BASE
+			LDR 	R7, =HEX4_5_BASE
+			MOV		R3, #0x7F
+			PUSH	{LR}        
+			B		Flag
+        
 HEX_write_ASM:
-            CMP     R1, #0x00           // confirm that R1 is between 0x00 and 0x0F,
-            BLT     _ERR                // otherwise jump to _ERR
-            CMP     R1, #0x0F
-            BLE     _HEX_write_ASM_unsafe
-_ERR:
-            //
-            // An error value (e.g. 1) should be returned here, but since
-            // the Lab #3 specification shows this routine's return value
-            // to be `void`, we'll just ignore the error.
-            //
+			MOV 	R2, #6	//loop counter
+			MOV 	R4, #1	//bit identifier
+			LDR		R6, =HEX0_3_BASE
+			LDR 	R7, =HEX4_5_BASE
+            LDR     R5, =Value
+			LDRB	R3, [R5, R1]       
+			PUSH	{LR}        
+			B		Flag
+			            			
+Flag:		TST 	R0, R4
+			BLNE	Identify
+			LSL 	R4, R4, #1
+			SUBS	R2, R2, #1
+			BEQ		Done
+			B		Flag
 
-            BX      LR                  // jump to LR
+Done:		POP		{LR}
+			BX		LR			
 
-_HEX_write_ASM_unsafe:
-            LDR     R2, =_H_DISPLAY     // R2 points to _H_DISPLAY
-            LDRB    R1, [R2, R1]        // R1 holds the HEX display value
-            PUSH    {LR}                // save the value of LR
-            BL      _HEX_impl           // jump to _HEX_impl
-            POP     {LR}                // restore the value of LR
-            BX      LR                  // jump to LR
+Identify:	CMP		R2, #6
+			BEQ		Hex0
+			CMP		R2, #5
+			BEQ		Hex1
+			CMP		R2, #4
+			BEQ		Hex2
+			CMP		R2, #3
+			BEQ		Hex3
+			CMP		R2, #2
+			BEQ		Hex4
+			CMP		R2, #1
+			BEQ		Hex5
 
-//
-// _HEX_impl:
-//
-// R0 = the bitwise-or of the HEX displays to modify
-// R1 = the value to which the HEX displays should bet set
-//
+Hex0:		STRB	R3, [R6]
+			BX		LR
 
-_HEX_impl:
-            PUSH    {R4 - R9, LR}       // save the current state of the registers
-            LDR     R9, =HEX4_5_BASE    // R9 points to HEX data register 2
-            LDR     R8, =HEX0_3_BASE    // R8 points to HEX data register 1
-            LDR     R7, [R9]            // R7 holds the HEX (register 2) value
-            LDR     R6, [R8]            // R6 holds the HEX (register 1) value
-            MOV     R5, #0x00000020     // R5 holds the current HEX index one-hot-encoding
-            MOV     R4, #6              // R4 holds the current HEX index
-_LOOP:
-            SUBS    R4, R4, #1          // decrement the loop counter
-            BMI     _DONE               // jump to _DONE if R4 is negative
-            TST     R5, R0              // check if one-hot-encoded R5 (bit) is set in R0
-            BEQ     _JUMP               // jump to _JUMP if the bit is _not_ set
+Hex1:		STRB	R3, [R6, #1]
+			BX		LR
 
-            // Jump table
+Hex2:		STRB	R3, [R6, #2]
+			BX		LR
 
-            CMP     R4, #6
-            ADDLS   PC, PC, R4, LSL #2
-            B       _DONE
-            B       _H0
-            B       _H1
-            B       _H2
-            B       _H3
-            B       _H4
+Hex3:		STRB	R3, [R6, #3]
+			BX		LR
 
-            //
-            // Micro-optimization:
-            //
-            // We can save a jump instruction (i.e. `B _H5`) here,
-            // since the jump table will cause execution to branch directly
-            // to _H5 if R4 is set to 5.
-            //
+Hex4:		STRB	R3, [R7]
+			BX		LR
 
-_H5:
-            BIC     R7, R7, #0x00007F00 // clear HEX5 value in R7 to 0
-            ORR     R7, R7, R1, LSL #8  // set HEX5 value in R7 to the value in R1
-            B       _JUMP               // jump to _JUMP
-_H4:
-            BIC     R7, R7, #0x0000007F
-            ORR     R7, R7, R1, LSL #0
-            B       _JUMP
-_H3:
-            BIC     R6, R6, #0x7F000000
-            ORR     R6, R6, R1, LSL #24
-            B       _JUMP
-_H2:
-            BIC     R6, R6, #0x007F0000
-            ORR     R6, R6, R1, LSL #16
-            B       _JUMP
-_H1:
-            BIC     R6, R6, #0x00007F00
-            ORR     R6, R6, R1, LSL #8
-            B       _JUMP
-_H0:
-            BIC     R6, R6, #0x0000007F
-            ORR     R6, R6, R1, LSL #0
+Hex5:		STRB	R3, [R7, #1]
+			BX		LR
 
-_JUMP:
-            LSR     R5, R5, #1          // shift R5 right by 1
-            B       _LOOP               // jump to _LOOP
-_DONE:
-            STR     R6, [R8]            // store HEX0-3 data to R8
-            STR     R7, [R9]            // store HEX4-5 data to R9
-            POP     {R4 - R9, LR}       // restore registers to their previous state
-            BX      LR                  // jump to LR
-
-//
-// _H_DISPLAY:
-//
-// A mapping of hexadecimal values to their corresponding
-// representation on the DE1-SoC's HEX display.
-//
-
-_H_DISPLAY:
-            .byte   0x3F                // '0'
+Value:		.byte   0x3F                // '0'
             .byte   0x06                // '1'
             .byte   0x5B                // '2'
             .byte   0x4F                // '3'
@@ -138,3 +90,5 @@ _H_DISPLAY:
             .byte   0x3F                // 'D'
             .byte   0x79                // 'E'
             .byte   0x71                // 'F'
+
+			.end
