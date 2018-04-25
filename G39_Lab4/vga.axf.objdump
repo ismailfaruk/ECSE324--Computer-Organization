@@ -196,7 +196,7 @@ void test_char(){
  298:	e51b0008 	ldr	r0, [r11, #-8]
  29c:	e51b100c 	ldr	r1, [r11, #-12]
  2a0:	e1a02003 	mov	r2, r3
- 2a4:	eb0000a4 	bl	53c <VGA_write_char_ASM>
+ 2a4:	eb0000e2 	bl	634 <VGA_write_char_ASM>
 void test_char(){
 	int x, y;
 	char c = 0;
@@ -256,7 +256,7 @@ void test_byte(){
  31c:	e51b0008 	ldr	r0, [r11, #-8]
  320:	e51b100c 	ldr	r1, [r11, #-12]
  324:	e1a02003 	mov	r2, r3
- 328:	eb000092 	bl	578 <VGA_write_byte_ASM>
+ 328:	eb0000d0 	bl	670 <VGA_write_byte_ASM>
 void test_byte(){
 	int x,y;
 	char c = 0;
@@ -317,7 +317,7 @@ void test_pixel(){
  3a4:	e51b0008 	ldr	r0, [r11, #-8]
  3a8:	e51b100c 	ldr	r1, [r11, #-12]
  3ac:	e1a02003 	mov	r2, r3
- 3b0:	eb000043 	bl	4c4 <VGA_draw_point_ASM>
+ 3b0:	eb000081 	bl	5bc <VGA_draw_point_ASM>
 void test_pixel(){
 	int x,y;
 	unsigned short colour = 0;
@@ -363,12 +363,12 @@ int main(){
 		
 		// Read Slide Switch
 		sw_input = read_slider_switches_ASM();
- 3fc:	eb000086 	bl	61c <read_slider_switches_ASM>
+ 3fc:	eb00005a 	bl	56c <read_slider_switches_ASM>
  400:	e50b0008 	str	r0, [r11, #-8]
 
 		if (PB_edgecap_is_pressed_ASM(PB0)){
  404:	e3a00001 	mov	r0, #1
- 408:	eb0000a3 	bl	69c <PB_edgecap_is_pressed_ASM>
+ 408:	eb000045 	bl	524 <PB_edgecap_is_pressed_ASM>
  40c:	e1a03000 	mov	r3, r0
  410:	e3530000 	cmp	r3, #0
  414:	0a000005 	beq	430 <main+0x40>
@@ -390,7 +390,7 @@ int main(){
 		
 		if (PB_edgecap_is_pressed_ASM(PB1)){
  430:	e3a00002 	mov	r0, #2
- 434:	eb000098 	bl	69c <PB_edgecap_is_pressed_ASM>
+ 434:	eb00003a 	bl	524 <PB_edgecap_is_pressed_ASM>
  438:	e1a03000 	mov	r3, r0
  43c:	e3530000 	cmp	r3, #0
  440:	0a000000 	beq	448 <main+0x58>
@@ -401,498 +401,498 @@ int main(){
 		
 		if (PB_edgecap_is_pressed_ASM(PB2)){
  448:	e3a00004 	mov	r0, #4
- 44c:	eb000092 	bl	69c <PB_edgecap_is_pressed_ASM>
+ 44c:	eb000034 	bl	524 <PB_edgecap_is_pressed_ASM>
  450:	e1a03000 	mov	r3, r0
  454:	e3530000 	cmp	r3, #0
  458:	0a000000 	beq	460 <main+0x70>
 			//printf("PB2\n");
 			VGA_clear_charbuff_ASM();			
- 45c:	eb000026 	bl	4fc <VGA_clear_charbuff_ASM>
+ 45c:	eb000064 	bl	5f4 <VGA_clear_charbuff_ASM>
 		}
 
 		if (PB_edgecap_is_pressed_ASM(PB3)){
  460:	e3a00008 	mov	r0, #8
- 464:	eb00008c 	bl	69c <PB_edgecap_is_pressed_ASM>
+ 464:	eb00002e 	bl	524 <PB_edgecap_is_pressed_ASM>
  468:	e1a03000 	mov	r3, r0
  46c:	e3530000 	cmp	r3, #0
  470:	0a000000 	beq	478 <main+0x88>
 			//printf("PB3\n");
 			VGA_clear_pixelbuff_ASM();
- 474:	eb000002 	bl	484 <VGA_clear_pixelbuff_ASM>
+ 474:	eb000040 	bl	57c <VGA_clear_pixelbuff_ASM>
 		}
 		
 		PB_clear_edgecap_ASM(PB0 | PB1 | PB2 | PB3);
  478:	e3a0000f 	mov	r0, #15
- 47c:	eb00008a 	bl	6ac <PB_clear_edgecap_ASM>
+ 47c:	eb00002c 	bl	534 <PB_clear_edgecap_ASM>
 	}
  480:	eaffffdd 	b	3fc <main+0xc>
 
-00000484 <VGA_clear_pixelbuff_ASM>:
+00000484 <write_audio_data_ASM>:
+	.equ audio_leftdata_base, 0xFF203048
+	.equ audio_rightdata_base, 0xFF20304C
+	.global write_audio_data_ASM
+
+write_audio_data_ASM:
+	LDR R1, =audio_Fifospace_base 
+ 484:	e59f1034 	ldr	r1, [pc, #52]	; 4c0 <write_audio_end+0x8>
+	LDRB R2, [R1, #2]
+ 488:	e5d12002 	ldrb	r2, [r1, #2]
+	LDRB R3, [R1, #3]
+ 48c:	e5d13003 	ldrb	r3, [r1, #3]
+
+	CMP R2, #0
+ 490:	e3520000 	cmp	r2, #0
+	BEQ	write_audio_end
+ 494:	0a000007 	beq	4b8 <write_audio_end>
+	CMP R3, #0
+ 498:	e3530000 	cmp	r3, #0
+	BEQ write_audio_end
+ 49c:	0a000005 	beq	4b8 <write_audio_end>
+
+	LDR R2, =audio_leftdata_base
+ 4a0:	e59f201c 	ldr	r2, [pc, #28]	; 4c4 <write_audio_end+0xc>
+	STR R0, [R2]
+ 4a4:	e5820000 	str	r0, [r2]
+	LDR R3, =audio_rightdata_base
+ 4a8:	e59f3018 	ldr	r3, [pc, #24]	; 4c8 <write_audio_end+0x10>
+	STR R0, [R3]
+ 4ac:	e5830000 	str	r0, [r3]
+
+	MOV R0, #1
+ 4b0:	e3a00001 	mov	r0, #1
+	BX LR
+ 4b4:	e12fff1e 	bx	lr
+
+000004b8 <write_audio_end>:
+
+write_audio_end:
+	MOV R0, #0
+ 4b8:	e3a00000 	mov	r0, #0
+	BX LR
+ 4bc:	e12fff1e 	bx	lr
+	.equ audio_leftdata_base, 0xFF203048
+	.equ audio_rightdata_base, 0xFF20304C
+	.global write_audio_data_ASM
+
+write_audio_data_ASM:
+	LDR R1, =audio_Fifospace_base 
+ 4c0:	ff203044 	.word	0xff203044
+	CMP R2, #0
+	BEQ	write_audio_end
+	CMP R3, #0
+	BEQ write_audio_end
+
+	LDR R2, =audio_leftdata_base
+ 4c4:	ff203048 	.word	0xff203048
+	STR R0, [R2]
+	LDR R3, =audio_rightdata_base
+ 4c8:	ff20304c 	.word	0xff20304c
+
+000004cc <read_PS2_data_ASM>:
+	.equ PS2_data_base, 0xFF200100
+	.equ PS2_control_base, 0xFF200104
+	.global read_PS2_data_ASM
+	
+read_PS2_data_ASM:
+	LDR	R1, =PS2_data_base
+ 4cc:	e59f1024 	ldr	r1, [pc, #36]	; 4f8 <VALID+0x10>
+	LDRB R2, [R1, #1]
+ 4d0:	e5d12001 	ldrb	r2, [r1, #1]
+	LSR R2, R2, #7		//extracted RVALID to R2
+ 4d4:	e1a023a2 	lsr	r2, r2, #7
+	CMP R2, #1
+ 4d8:	e3520001 	cmp	r2, #1
+	BEQ VALID
+ 4dc:	0a000001 	beq	4e8 <VALID>
+	MOV R0, #0
+ 4e0:	e3a00000 	mov	r0, #0
+	BX LR
+ 4e4:	e12fff1e 	bx	lr
+
+000004e8 <VALID>:
+
+VALID:
+	LDRB R2, [R1]
+ 4e8:	e5d12000 	ldrb	r2, [r1]
+	STRB R2, [R0]
+ 4ec:	e5c02000 	strb	r2, [r0]
+	MOV R0, #1
+ 4f0:	e3a00001 	mov	r0, #1
+	BX LR
+ 4f4:	e12fff1e 	bx	lr
+	.equ PS2_data_base, 0xFF200100
+	.equ PS2_control_base, 0xFF200104
+	.global read_PS2_data_ASM
+	
+read_PS2_data_ASM:
+	LDR	R1, =PS2_data_base
+ 4f8:	ff200100 	.word	0xff200100
+
+000004fc <read_PB_data_ASM>:
+            .global PB_clear_edgecap_ASM
+            .global enable_PB_INT_ASM
+            .global disable_PB_INT_ASM
+
+read_PB_data_ASM:
+            LDR     R1, =KEY_BASE       // R1 points to KEY data register
+ 4fc:	e59f1064 	ldr	r1, [pc, #100]	; 568 <disable_PB_INT_ASM+0x14>
+            LDR     R0, [R1]            // R0 holds the value of KEY data register
+ 500:	e5910000 	ldr	r0, [r1]
+            BX      LR
+ 504:	e12fff1e 	bx	lr
+
+00000508 <read_PB_data_is_pressed_ASM>:
+
+read_PB_data_is_pressed_ASM:
+            LDR     R2, =KEY_BASE       // R2 points to KEY data register
+ 508:	e59f2058 	ldr	r2, [pc, #88]	; 568 <disable_PB_INT_ASM+0x14>
+            LDR     R1, [R2]            // R1 holds the value of KEY data register
+ 50c:	e5921000 	ldr	r1, [r2]
+            AND     R0, R0, R1          // perform bitwise-and on R1 and PB mask 
+ 510:	e0000001 	and	r0, r0, r1
+            BX      LR
+ 514:	e12fff1e 	bx	lr
+
+00000518 <read_PB_edgecap_ASM>:
+
+read_PB_edgecap_ASM:
+            LDR     R1, =KEY_BASE       // R1 points to KEY data register
+ 518:	e59f1048 	ldr	r1, [pc, #72]	; 568 <disable_PB_INT_ASM+0x14>
+            LDR     R0, [R1, #12]       // R0 holds the value of KEY edgecapture register
+ 51c:	e591000c 	ldr	r0, [r1, #12]
+            BX      LR
+ 520:	e12fff1e 	bx	lr
+
+00000524 <PB_edgecap_is_pressed_ASM>:
+
+PB_edgecap_is_pressed_ASM:
+            LDR     R2, =KEY_BASE       // R2 points to KEY data register
+ 524:	e59f203c 	ldr	r2, [pc, #60]	; 568 <disable_PB_INT_ASM+0x14>
+            LDR     R1, [R2, #12]       // R1 holds the value of KEY edgecapture register
+ 528:	e592100c 	ldr	r1, [r2, #12]
+            AND     R0, R0, R1          // perform bitwise-and on R1 and PB mask
+ 52c:	e0000001 	and	r0, r0, r1
+            BX      LR
+ 530:	e12fff1e 	bx	lr
+
+00000534 <PB_clear_edgecap_ASM>:
+
+PB_clear_edgecap_ASM:
+            LDR     R1, =KEY_BASE       // R1 points to KEY data register
+ 534:	e59f102c 	ldr	r1, [pc, #44]	; 568 <disable_PB_INT_ASM+0x14>
+            STR     R0, [R1, #12]       // place R0 in KEY edgecapture register
+ 538:	e581000c 	str	r0, [r1, #12]
+            BX      LR
+ 53c:	e12fff1e 	bx	lr
+
+00000540 <enable_PB_INT_ASM>:
+
+enable_PB_INT_ASM:
+            LDR     R2, =KEY_BASE       // R2 points to KEY data register
+ 540:	e59f2020 	ldr	r2, [pc, #32]	; 568 <disable_PB_INT_ASM+0x14>
+            LDR     R1, [R2, #8]        // R1 holds the value of KEY interrupt register
+ 544:	e5921008 	ldr	r1, [r2, #8]
+            ORR     R1, R1, R0          // perform bitwise-or on R1 and PB mask
+ 548:	e1811000 	orr	r1, r1, r0
+            STR     R1, [R2, #8]        // place R1 in KEY interrupt register
+ 54c:	e5821008 	str	r1, [r2, #8]
+            BX      LR
+ 550:	e12fff1e 	bx	lr
+
+00000554 <disable_PB_INT_ASM>:
+
+disable_PB_INT_ASM:
+            LDR     R2, =KEY_BASE       // R2 points to KEY data register
+ 554:	e59f200c 	ldr	r2, [pc, #12]	; 568 <disable_PB_INT_ASM+0x14>
+            LDR     R1, [R2, #8]        // R1 holds the value of KEY interrupt register
+ 558:	e5921008 	ldr	r1, [r2, #8]
+            BIC     R1, R1, R0          // perform bit-clear on R1 using PB mask
+ 55c:	e1c11000 	bic	r1, r1, r0
+            STR     R1, [R2, #8]        // place R1 in KEY interrupt register
+ 560:	e5821008 	str	r1, [r2, #8]
+            BX      LR
+ 564:	e12fff1e 	bx	lr
+            .global PB_clear_edgecap_ASM
+            .global enable_PB_INT_ASM
+            .global disable_PB_INT_ASM
+
+read_PB_data_ASM:
+            LDR     R1, =KEY_BASE       // R1 points to KEY data register
+ 568:	ff200050 	.word	0xff200050
+
+0000056c <read_slider_switches_ASM>:
+            .text
+            .equ SW_BASE, 0xFF200040
+            .global read_slider_switches_ASM
+
+read_slider_switches_ASM:
+            LDR     R1, =SW_BASE        // R1 points to SW data register
+ 56c:	e59f1004 	ldr	r1, [pc, #4]	; 578 <read_slider_switches_ASM+0xc>
+            LDR     R0, [R1]            // R0 holds the value of SW data register
+ 570:	e5910000 	ldr	r0, [r1]
+            BX      LR
+ 574:	e12fff1e 	bx	lr
+            .text
+            .equ SW_BASE, 0xFF200040
+            .global read_slider_switches_ASM
+
+read_slider_switches_ASM:
+            LDR     R1, =SW_BASE        // R1 points to SW data register
+ 578:	ff200040 	.word	0xff200040
+
+0000057c <VGA_clear_pixelbuff_ASM>:
 	.global VGA_write_char_ASM
 	.global VGA_write_byte_ASM
 	.global VGA_draw_point_ASM
 		
 VGA_clear_pixelbuff_ASM:
 	PUSH {R4-R5}	
- 484:	e92d0030 	push	{r4, r5}
+ 57c:	e92d0030 	push	{r4, r5}
 	MOV R2, #0
- 488:	e3a02000 	mov	r2, #0
+ 580:	e3a02000 	mov	r2, #0
 	LDR R3, =VGA_PIXEL_BUF_BASE
- 48c:	e3a03332 	mov	r3, #-939524096	; 0xc8000000
+ 584:	e3a03332 	mov	r3, #-939524096	; 0xc8000000
 
 	MOV R0, #0
- 490:	e3a00000 	mov	r0, #0
+ 588:	e3a00000 	mov	r0, #0
 
-00000494 <PIXEL_LOOPX>:
+0000058c <PIXEL_LOOPX>:
 
 PIXEL_LOOPX:
 	MOV R1, #0
- 494:	e3a01000 	mov	r1, #0
+ 58c:	e3a01000 	mov	r1, #0
 	ADD R4, R3, R0, LSL #1
- 498:	e0834080 	add	r4, r3, r0, lsl #1
+ 590:	e0834080 	add	r4, r3, r0, lsl #1
 
-0000049c <PIXEL_LOOPY>:
+00000594 <PIXEL_LOOPY>:
 
 PIXEL_LOOPY:
 	ADD R5, R4, R1, LSL #10
- 49c:	e0845501 	add	r5, r4, r1, lsl #10
+ 594:	e0845501 	add	r5, r4, r1, lsl #10
 	
 	STRH R2, [R5]
- 4a0:	e1c520b0 	strh	r2, [r5]
+ 598:	e1c520b0 	strh	r2, [r5]
 	
 	ADD R1, R1, #1
- 4a4:	e2811001 	add	r1, r1, #1
+ 59c:	e2811001 	add	r1, r1, #1
 	CMP R1, #240
- 4a8:	e35100f0 	cmp	r1, #240	; 0xf0
+ 5a0:	e35100f0 	cmp	r1, #240	; 0xf0
 	BLT PIXEL_LOOPY
- 4ac:	bafffffa 	blt	49c <PIXEL_LOOPY>
+ 5a4:	bafffffa 	blt	594 <PIXEL_LOOPY>
 	
 	ADD R0, R0, #1
- 4b0:	e2800001 	add	r0, r0, #1
+ 5a8:	e2800001 	add	r0, r0, #1
 	CMP R0, #320
- 4b4:	e3500d05 	cmp	r0, #320	; 0x140
+ 5ac:	e3500d05 	cmp	r0, #320	; 0x140
 	BLT PIXEL_LOOPX
- 4b8:	bafffff5 	blt	494 <PIXEL_LOOPX>
+ 5b0:	bafffff5 	blt	58c <PIXEL_LOOPX>
 
 	POP {R4-R5}
- 4bc:	e8bd0030 	pop	{r4, r5}
+ 5b4:	e8bd0030 	pop	{r4, r5}
 	BX LR
- 4c0:	e12fff1e 	bx	lr
+ 5b8:	e12fff1e 	bx	lr
 
-000004c4 <VGA_draw_point_ASM>:
+000005bc <VGA_draw_point_ASM>:
 
 VGA_draw_point_ASM:
 	LDR R3, =319
- 4c4:	e59f3118 	ldr	r3, [pc, #280]	; 5e4 <HEX_ASCII+0x10>
+ 5bc:	e59f3118 	ldr	r3, [pc, #280]	; 6dc <HEX_ASCII+0x10>
 	CMP R0, #0
- 4c8:	e3500000 	cmp	r0, #0
+ 5c0:	e3500000 	cmp	r0, #0
 	BXLT LR
- 4cc:	b12fff1e 	bxlt	lr
+ 5c4:	b12fff1e 	bxlt	lr
 	CMP R1, #0
- 4d0:	e3510000 	cmp	r1, #0
+ 5c8:	e3510000 	cmp	r1, #0
 	BXLT LR
- 4d4:	b12fff1e 	bxlt	lr
+ 5cc:	b12fff1e 	bxlt	lr
 	CMP R0, R3
- 4d8:	e1500003 	cmp	r0, r3
+ 5d0:	e1500003 	cmp	r0, r3
 	BXGT LR
- 4dc:	c12fff1e 	bxgt	lr
+ 5d4:	c12fff1e 	bxgt	lr
 	CMP R1, #239
- 4e0:	e35100ef 	cmp	r1, #239	; 0xef
+ 5d8:	e35100ef 	cmp	r1, #239	; 0xef
 	BXGT LR
- 4e4:	c12fff1e 	bxgt	lr
+ 5dc:	c12fff1e 	bxgt	lr
 	
 	LDR R3, =VGA_PIXEL_BUF_BASE
- 4e8:	e3a03332 	mov	r3, #-939524096	; 0xc8000000
+ 5e0:	e3a03332 	mov	r3, #-939524096	; 0xc8000000
 
 	ADD R3, R3, R0, LSL #1
- 4ec:	e0833080 	add	r3, r3, r0, lsl #1
+ 5e4:	e0833080 	add	r3, r3, r0, lsl #1
 	ADD R3, R3, R1, LSL #10
- 4f0:	e0833501 	add	r3, r3, r1, lsl #10
+ 5e8:	e0833501 	add	r3, r3, r1, lsl #10
 
 	STRH R2, [R3]
- 4f4:	e1c320b0 	strh	r2, [r3]
+ 5ec:	e1c320b0 	strh	r2, [r3]
 
 	BX LR
- 4f8:	e12fff1e 	bx	lr
+ 5f0:	e12fff1e 	bx	lr
 
-000004fc <VGA_clear_charbuff_ASM>:
+000005f4 <VGA_clear_charbuff_ASM>:
 	
 VGA_clear_charbuff_ASM:
 	PUSH {R4-R5}	
- 4fc:	e92d0030 	push	{r4, r5}
+ 5f4:	e92d0030 	push	{r4, r5}
 	MOV R2, #0
- 500:	e3a02000 	mov	r2, #0
+ 5f8:	e3a02000 	mov	r2, #0
 	LDR R3, =VGA_CHAR_BUF_BASE
- 504:	e3a034c9 	mov	r3, #-922746880	; 0xc9000000
+ 5fc:	e3a034c9 	mov	r3, #-922746880	; 0xc9000000
 
 	MOV R0, #0
- 508:	e3a00000 	mov	r0, #0
+ 600:	e3a00000 	mov	r0, #0
 
-0000050c <CHAR_LOOPX>:
+00000604 <CHAR_LOOPX>:
 	
 CHAR_LOOPX:
 	MOV R1, #0
- 50c:	e3a01000 	mov	r1, #0
+ 604:	e3a01000 	mov	r1, #0
 	ADD R4, R3, R0
- 510:	e0834000 	add	r4, r3, r0
+ 608:	e0834000 	add	r4, r3, r0
 
-00000514 <CHAR_LOOPY>:
+0000060c <CHAR_LOOPY>:
 CHAR_LOOPY:
 	ADD R5, R4, R1, LSL #7
- 514:	e0845381 	add	r5, r4, r1, lsl #7
+ 60c:	e0845381 	add	r5, r4, r1, lsl #7
 	
 	STRB R2, [R5]
- 518:	e5c52000 	strb	r2, [r5]
+ 610:	e5c52000 	strb	r2, [r5]
 	
 	ADD R1, R1, #1
- 51c:	e2811001 	add	r1, r1, #1
+ 614:	e2811001 	add	r1, r1, #1
 	CMP R1, #60
- 520:	e351003c 	cmp	r1, #60	; 0x3c
+ 618:	e351003c 	cmp	r1, #60	; 0x3c
 	BLT CHAR_LOOPY
- 524:	bafffffa 	blt	514 <CHAR_LOOPY>
+ 61c:	bafffffa 	blt	60c <CHAR_LOOPY>
 	
 	ADD R0, R0, #1
- 528:	e2800001 	add	r0, r0, #1
+ 620:	e2800001 	add	r0, r0, #1
 	CMP R0, #80
- 52c:	e3500050 	cmp	r0, #80	; 0x50
+ 624:	e3500050 	cmp	r0, #80	; 0x50
 	BLT CHAR_LOOPX
- 530:	bafffff5 	blt	50c <CHAR_LOOPX>
+ 628:	bafffff5 	blt	604 <CHAR_LOOPX>
 	
 	POP {R4-R5}
- 534:	e8bd0030 	pop	{r4, r5}
+ 62c:	e8bd0030 	pop	{r4, r5}
 	BX LR
- 538:	e12fff1e 	bx	lr
+ 630:	e12fff1e 	bx	lr
 
-0000053c <VGA_write_char_ASM>:
+00000634 <VGA_write_char_ASM>:
 
 VGA_write_char_ASM:
 	CMP R0, #80			//validation
- 53c:	e3500050 	cmp	r0, #80	; 0x50
+ 634:	e3500050 	cmp	r0, #80	; 0x50
 	BGE VGA_write_end
- 540:	aa000022 	bge	5d0 <VGA_write_end>
+ 638:	aa000022 	bge	6c8 <VGA_write_end>
 	CMP R0, #0
- 544:	e3500000 	cmp	r0, #0
+ 63c:	e3500000 	cmp	r0, #0
 	BLT VGA_write_end
- 548:	ba000020 	blt	5d0 <VGA_write_end>
+ 640:	ba000020 	blt	6c8 <VGA_write_end>
 	CMP R1, #60
- 54c:	e351003c 	cmp	r1, #60	; 0x3c
+ 644:	e351003c 	cmp	r1, #60	; 0x3c
 	BGE VGA_write_end
- 550:	aa00001e 	bge	5d0 <VGA_write_end>
+ 648:	aa00001e 	bge	6c8 <VGA_write_end>
 	CMP R1, #0
- 554:	e3510000 	cmp	r1, #0
+ 64c:	e3510000 	cmp	r1, #0
 	BLT VGA_write_end
- 558:	ba00001c 	blt	5d0 <VGA_write_end>
+ 650:	ba00001c 	blt	6c8 <VGA_write_end>
 
 	PUSH {R4-R5}
- 55c:	e92d0030 	push	{r4, r5}
+ 654:	e92d0030 	push	{r4, r5}
 	LDR R3, =VGA_CHAR_BUF_BASE
- 560:	e3a034c9 	mov	r3, #-922746880	; 0xc9000000
+ 658:	e3a034c9 	mov	r3, #-922746880	; 0xc9000000
 	
 	ADD R4, R3, R0		//address calculaion
- 564:	e0834000 	add	r4, r3, r0
+ 65c:	e0834000 	add	r4, r3, r0
 	ADD R5, R4, R1, LSL #7
- 568:	e0845381 	add	r5, r4, r1, lsl #7
+ 660:	e0845381 	add	r5, r4, r1, lsl #7
 
 	STRB R2, [R5]
- 56c:	e5c52000 	strb	r2, [r5]
+ 664:	e5c52000 	strb	r2, [r5]
 
 	POP {R4-R5}
- 570:	e8bd0030 	pop	{r4, r5}
+ 668:	e8bd0030 	pop	{r4, r5}
 	BX LR	
- 574:	e12fff1e 	bx	lr
+ 66c:	e12fff1e 	bx	lr
 
-00000578 <VGA_write_byte_ASM>:
+00000670 <VGA_write_byte_ASM>:
 
 VGA_write_byte_ASM:
 	CMP R0, #80			//validation
- 578:	e3500050 	cmp	r0, #80	; 0x50
+ 670:	e3500050 	cmp	r0, #80	; 0x50
 	BGE VGA_write_end
- 57c:	aa000013 	bge	5d0 <VGA_write_end>
+ 674:	aa000013 	bge	6c8 <VGA_write_end>
 	CMP R0, #0
- 580:	e3500000 	cmp	r0, #0
+ 678:	e3500000 	cmp	r0, #0
 	BLT VGA_write_end
- 584:	ba000011 	blt	5d0 <VGA_write_end>
+ 67c:	ba000011 	blt	6c8 <VGA_write_end>
 	CMP R1, #60
- 588:	e351003c 	cmp	r1, #60	; 0x3c
+ 680:	e351003c 	cmp	r1, #60	; 0x3c
 	BGE VGA_write_end
- 58c:	aa00000f 	bge	5d0 <VGA_write_end>
+ 684:	aa00000f 	bge	6c8 <VGA_write_end>
 	CMP R1, #0
- 590:	e3510000 	cmp	r1, #0
+ 688:	e3510000 	cmp	r1, #0
 	BLT VGA_write_end
- 594:	ba00000d 	blt	5d0 <VGA_write_end>
+ 68c:	ba00000d 	blt	6c8 <VGA_write_end>
 	
 	PUSH {R4-R8, LR}
- 598:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+ 690:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
 	LDR R3, =VGA_CHAR_BUF_BASE
- 59c:	e3a034c9 	mov	r3, #-922746880	; 0xc9000000
+ 694:	e3a034c9 	mov	r3, #-922746880	; 0xc9000000
 	LDR R8, =HEX_ASCII
- 5a0:	e59f8040 	ldr	r8, [pc, #64]	; 5e8 <HEX_ASCII+0x14>
+ 698:	e59f8040 	ldr	r8, [pc, #64]	; 6e0 <HEX_ASCII+0x14>
 	
 	ADD R4, R3, R0		//address calculaion
- 5a4:	e0834000 	add	r4, r3, r0
+ 69c:	e0834000 	add	r4, r3, r0
 	ADD R5, R4, R1, LSL #7
- 5a8:	e0845381 	add	r5, r4, r1, lsl #7
+ 6a0:	e0845381 	add	r5, r4, r1, lsl #7
 	
 	AND R6, R2, #0x0F
- 5ac:	e202600f 	and	r6, r2, #15
+ 6a4:	e202600f 	and	r6, r2, #15
 	AND R7, R2, #0xF0
- 5b0:	e20270f0 	and	r7, r2, #240	; 0xf0
+ 6a8:	e20270f0 	and	r7, r2, #240	; 0xf0
 	LSR R7, R7, #4 
- 5b4:	e1a07227 	lsr	r7, r7, #4
+ 6ac:	e1a07227 	lsr	r7, r7, #4
 	
 	LDRB R6, [R8, R6]
- 5b8:	e7d86006 	ldrb	r6, [r8, r6]
+ 6b0:	e7d86006 	ldrb	r6, [r8, r6]
 	LDRB R7, [R8, R7]
- 5bc:	e7d87007 	ldrb	r7, [r8, r7]
+ 6b4:	e7d87007 	ldrb	r7, [r8, r7]
 
 	STRB R6, [R5, #1]
- 5c0:	e5c56001 	strb	r6, [r5, #1]
+ 6b8:	e5c56001 	strb	r6, [r5, #1]
 	STRB R7, [R5] 
- 5c4:	e5c57000 	strb	r7, [r5]
+ 6bc:	e5c57000 	strb	r7, [r5]
 
 	POP {R4-R8, LR}
- 5c8:	e8bd41f0 	pop	{r4, r5, r6, r7, r8, lr}
+ 6c0:	e8bd41f0 	pop	{r4, r5, r6, r7, r8, lr}
 	BX LR
- 5cc:	e12fff1e 	bx	lr
+ 6c4:	e12fff1e 	bx	lr
 
-000005d0 <VGA_write_end>:
+000006c8 <VGA_write_end>:
 
 VGA_write_end:
 	BX LR
- 5d0:	e12fff1e 	bx	lr
+ 6c8:	e12fff1e 	bx	lr
 
-000005d4 <HEX_ASCII>:
- 5d4:	33323130 	.word	0x33323130
- 5d8:	37363534 	.word	0x37363534
- 5dc:	42413938 	.word	0x42413938
- 5e0:	46454443 	.word	0x46454443
+000006cc <HEX_ASCII>:
+ 6cc:	33323130 	.word	0x33323130
+ 6d0:	37363534 	.word	0x37363534
+ 6d4:	42413938 	.word	0x42413938
+ 6d8:	46454443 	.word	0x46454443
 
 	POP {R4-R5}
 	BX LR
 
 VGA_draw_point_ASM:
 	LDR R3, =319
- 5e4:	0000013f 	.word	0x0000013f
+ 6dc:	0000013f 	.word	0x0000013f
 	CMP R1, #0
 	BLT VGA_write_end
 	
 	PUSH {R4-R8, LR}
 	LDR R3, =VGA_CHAR_BUF_BASE
 	LDR R8, =HEX_ASCII
- 5e8:	000005d4 	.word	0x000005d4
-
-000005ec <read_PS2_data_ASM>:
-	.equ PS2_data_base, 0xFF200100
-	.equ PS2_control_base, 0xFF200104
-	.global read_PS2_data_ASM
-	
-read_PS2_data_ASM:
-	LDR	R1, =PS2_data_base
- 5ec:	e59f1024 	ldr	r1, [pc, #36]	; 618 <VALID+0x10>
-	LDRB R2, [R1, #1]
- 5f0:	e5d12001 	ldrb	r2, [r1, #1]
-	LSR R2, R2, #7		//extracted RVALID to R2
- 5f4:	e1a023a2 	lsr	r2, r2, #7
-	CMP R2, #1
- 5f8:	e3520001 	cmp	r2, #1
-	BEQ VALID
- 5fc:	0a000001 	beq	608 <VALID>
-	MOV R0, #0
- 600:	e3a00000 	mov	r0, #0
-	BX LR
- 604:	e12fff1e 	bx	lr
-
-00000608 <VALID>:
-
-VALID:
-	LDRB R2, [R1]
- 608:	e5d12000 	ldrb	r2, [r1]
-	STRB R2, [R0]
- 60c:	e5c02000 	strb	r2, [r0]
-	MOV R0, #1
- 610:	e3a00001 	mov	r0, #1
-	BX LR
- 614:	e12fff1e 	bx	lr
-	.equ PS2_data_base, 0xFF200100
-	.equ PS2_control_base, 0xFF200104
-	.global read_PS2_data_ASM
-	
-read_PS2_data_ASM:
-	LDR	R1, =PS2_data_base
- 618:	ff200100 	.word	0xff200100
-
-0000061c <read_slider_switches_ASM>:
-            .text
-            .equ SW_BASE, 0xFF200040
-            .global read_slider_switches_ASM
-
-read_slider_switches_ASM:
-            LDR     R1, =SW_BASE        // R1 points to SW data register
- 61c:	e59f1004 	ldr	r1, [pc, #4]	; 628 <read_slider_switches_ASM+0xc>
-            LDR     R0, [R1]            // R0 holds the value of SW data register
- 620:	e5910000 	ldr	r0, [r1]
-            BX      LR
- 624:	e12fff1e 	bx	lr
-            .text
-            .equ SW_BASE, 0xFF200040
-            .global read_slider_switches_ASM
-
-read_slider_switches_ASM:
-            LDR     R1, =SW_BASE        // R1 points to SW data register
- 628:	ff200040 	.word	0xff200040
-
-0000062c <write_audio_data_ASM>:
-	.equ audio_leftdata_base, 0xFF203048
-	.equ audio_rightdata_base, 0xFF20304C
-	.global write_audio_data_ASM
-
-write_audio_data_ASM:
-	LDR R1, =audio_Fifospace_base 
- 62c:	e59f1034 	ldr	r1, [pc, #52]	; 668 <write_audio_end+0x8>
-	LDRB R2, [R1, #2]
- 630:	e5d12002 	ldrb	r2, [r1, #2]
-	LDRB R3, [R1, #3]
- 634:	e5d13003 	ldrb	r3, [r1, #3]
-
-	CMP R2, #0
- 638:	e3520000 	cmp	r2, #0
-	BEQ	write_audio_end
- 63c:	0a000007 	beq	660 <write_audio_end>
-	CMP R3, #0
- 640:	e3530000 	cmp	r3, #0
-	BEQ write_audio_end
- 644:	0a000005 	beq	660 <write_audio_end>
-
-	LDR R2, =audio_leftdata_base
- 648:	e59f201c 	ldr	r2, [pc, #28]	; 66c <write_audio_end+0xc>
-	STR R0, [R2]
- 64c:	e5820000 	str	r0, [r2]
-	LDR R3, =audio_rightdata_base
- 650:	e59f3018 	ldr	r3, [pc, #24]	; 670 <write_audio_end+0x10>
-	STR R0, [R3]
- 654:	e5830000 	str	r0, [r3]
-
-	MOV R0, #1
- 658:	e3a00001 	mov	r0, #1
-	BX LR
- 65c:	e12fff1e 	bx	lr
-
-00000660 <write_audio_end>:
-
-write_audio_end:
-	MOV R0, #0
- 660:	e3a00000 	mov	r0, #0
-	BX LR
- 664:	e12fff1e 	bx	lr
-	.equ audio_leftdata_base, 0xFF203048
-	.equ audio_rightdata_base, 0xFF20304C
-	.global write_audio_data_ASM
-
-write_audio_data_ASM:
-	LDR R1, =audio_Fifospace_base 
- 668:	ff203044 	.word	0xff203044
-	CMP R2, #0
-	BEQ	write_audio_end
-	CMP R3, #0
-	BEQ write_audio_end
-
-	LDR R2, =audio_leftdata_base
- 66c:	ff203048 	.word	0xff203048
-	STR R0, [R2]
-	LDR R3, =audio_rightdata_base
- 670:	ff20304c 	.word	0xff20304c
-
-00000674 <read_PB_data_ASM>:
-            .global PB_clear_edgecap_ASM
-            .global enable_PB_INT_ASM
-            .global disable_PB_INT_ASM
-
-read_PB_data_ASM:
-            LDR     R1, =KEY_BASE       // R1 points to KEY data register
- 674:	e59f1064 	ldr	r1, [pc, #100]	; 6e0 <disable_PB_INT_ASM+0x14>
-            LDR     R0, [R1]            // R0 holds the value of KEY data register
- 678:	e5910000 	ldr	r0, [r1]
-            BX      LR
- 67c:	e12fff1e 	bx	lr
-
-00000680 <read_PB_data_is_pressed_ASM>:
-
-read_PB_data_is_pressed_ASM:
-            LDR     R2, =KEY_BASE       // R2 points to KEY data register
- 680:	e59f2058 	ldr	r2, [pc, #88]	; 6e0 <disable_PB_INT_ASM+0x14>
-            LDR     R1, [R2]            // R1 holds the value of KEY data register
- 684:	e5921000 	ldr	r1, [r2]
-            AND     R0, R0, R1          // perform bitwise-and on R1 and PB mask 
- 688:	e0000001 	and	r0, r0, r1
-            BX      LR
- 68c:	e12fff1e 	bx	lr
-
-00000690 <read_PB_edgecap_ASM>:
-
-read_PB_edgecap_ASM:
-            LDR     R1, =KEY_BASE       // R1 points to KEY data register
- 690:	e59f1048 	ldr	r1, [pc, #72]	; 6e0 <disable_PB_INT_ASM+0x14>
-            LDR     R0, [R1, #12]       // R0 holds the value of KEY edgecapture register
- 694:	e591000c 	ldr	r0, [r1, #12]
-            BX      LR
- 698:	e12fff1e 	bx	lr
-
-0000069c <PB_edgecap_is_pressed_ASM>:
-
-PB_edgecap_is_pressed_ASM:
-            LDR     R2, =KEY_BASE       // R2 points to KEY data register
- 69c:	e59f203c 	ldr	r2, [pc, #60]	; 6e0 <disable_PB_INT_ASM+0x14>
-            LDR     R1, [R2, #12]       // R1 holds the value of KEY edgecapture register
- 6a0:	e592100c 	ldr	r1, [r2, #12]
-            AND     R0, R0, R1          // perform bitwise-and on R1 and PB mask
- 6a4:	e0000001 	and	r0, r0, r1
-            BX      LR
- 6a8:	e12fff1e 	bx	lr
-
-000006ac <PB_clear_edgecap_ASM>:
-
-PB_clear_edgecap_ASM:
-            LDR     R1, =KEY_BASE       // R1 points to KEY data register
- 6ac:	e59f102c 	ldr	r1, [pc, #44]	; 6e0 <disable_PB_INT_ASM+0x14>
-            STR     R0, [R1, #12]       // place R0 in KEY edgecapture register
- 6b0:	e581000c 	str	r0, [r1, #12]
-            BX      LR
- 6b4:	e12fff1e 	bx	lr
-
-000006b8 <enable_PB_INT_ASM>:
-
-enable_PB_INT_ASM:
-            LDR     R2, =KEY_BASE       // R2 points to KEY data register
- 6b8:	e59f2020 	ldr	r2, [pc, #32]	; 6e0 <disable_PB_INT_ASM+0x14>
-            LDR     R1, [R2, #8]        // R1 holds the value of KEY interrupt register
- 6bc:	e5921008 	ldr	r1, [r2, #8]
-            ORR     R1, R1, R0          // perform bitwise-or on R1 and PB mask
- 6c0:	e1811000 	orr	r1, r1, r0
-            STR     R1, [R2, #8]        // place R1 in KEY interrupt register
- 6c4:	e5821008 	str	r1, [r2, #8]
-            BX      LR
- 6c8:	e12fff1e 	bx	lr
-
-000006cc <disable_PB_INT_ASM>:
-
-disable_PB_INT_ASM:
-            LDR     R2, =KEY_BASE       // R2 points to KEY data register
- 6cc:	e59f200c 	ldr	r2, [pc, #12]	; 6e0 <disable_PB_INT_ASM+0x14>
-            LDR     R1, [R2, #8]        // R1 holds the value of KEY interrupt register
- 6d0:	e5921008 	ldr	r1, [r2, #8]
-            BIC     R1, R1, R0          // perform bit-clear on R1 using PB mask
- 6d4:	e1c11000 	bic	r1, r1, r0
-            STR     R1, [R2, #8]        // place R1 in KEY interrupt register
- 6d8:	e5821008 	str	r1, [r2, #8]
-            BX      LR
- 6dc:	e12fff1e 	bx	lr
-            .global PB_clear_edgecap_ASM
-            .global enable_PB_INT_ASM
-            .global disable_PB_INT_ASM
-
-read_PB_data_ASM:
-            LDR     R1, =KEY_BASE       // R1 points to KEY data register
- 6e0:	ff200050 	.word	0xff200050
+ 6e0:	000006cc 	.word	0x000006cc
 
 000006e4 <atexit>:
  6e4:	e1a01000 	mov	r1, r0

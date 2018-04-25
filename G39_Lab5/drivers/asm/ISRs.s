@@ -20,8 +20,6 @@
 	.global hps_tim1_int_flag
 	.global hps_tim2_int_flag
 
-	.global kb_int_flag
-
 hps_tim0_int_flag:
 	.word 0x0
 
@@ -29,9 +27,6 @@ hps_tim1_int_flag:
 	.word 0x0
 
 hps_tim2_int_flag:
-	.word 0x0
-
-kb_int_flag:
 	.word 0x0
 
 A9_PRIV_TIM_ISR:

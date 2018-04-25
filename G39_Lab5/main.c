@@ -71,6 +71,8 @@ void wave_generator(){
 int main() {
 	//declare and define varialbes
 	int_setup(3, (int []) {199, 200, 201});		//turning on interrupts for HPS Timer 1, 2, 3
+
+	//define array pointers for note arrays
 	int t_note1 = 0;
 	int t_note2 = 0;
 	int t_note3 = 0;
@@ -80,10 +82,9 @@ int main() {
 	int t_note7 = 0;
 	int t_note8 = 0;
 
+	int total_sample = 0;
 
-	int total_sample;
-
-	char* data;
+	char* data = (char*) malloc(sizeof(char));
  
 	int input_key;	//int variable for keyboard input
 	
@@ -98,16 +99,18 @@ int main() {
 	int note8_flag = 0;
 
 	//VGA variables
-	int VGA_x = 0;
-	int VGA_base_y = 119;
-	int VGA_y = 0;
-	printf("variables done\n");
-	//audio timer
+	int VGA_X = 0;
+	int VGA_Base_Y = 120;
+	int VGA_Y[320];
+	int VGA_prev[320];
+	int array_full;
+	int Y_count = 0;
 
+	//audio timer
 	HPS_TIM_config_t hps_tim0;
 
     hps_tim0.tim = TIM0;
-    hps_tim0.timeout = 21;	//21	//microseconds, calculated from (1/48000) to feed the codec each sample at the rate each sample is processed 
+    hps_tim0.timeout = 20;	//21	//microseconds, calculated from (1/48000) to feed the codec each sample at the rate each sample is processed 
     hps_tim0.LD_en = 1;
     hps_tim0.INT_en = 1;
     hps_tim0.enable = 1;
@@ -118,16 +121,16 @@ int main() {
     HPS_TIM_config_t hps_tim1;
 
     hps_tim1.tim = TIM1;
-    hps_tim1.timeout = 1000;	//10000	//microseconds
+    hps_tim1.timeout = 50;	//10000	//microseconds
     hps_tim1.LD_en = 1;
     hps_tim1.INT_en = 1;
     hps_tim1.enable = 1;
 
 	HPS_TIM_config_ASM(&hps_tim1);		//Configure timer
 
-
 	//VGA timer
     HPS_TIM_config_t hps_tim2;
+
     hps_tim2.tim = TIM2;
     hps_tim2.timeout = 100000;	//100000	//microseconds
     hps_tim2.LD_en = 1;
@@ -139,9 +142,9 @@ int main() {
 	VGA_clear_pixelbuff_ASM();		//clear the screen at first
 
  	wave_generator();		//generated wave and store into array
-	printf("all start\n");
+
 	while(1) {
-		
+		total_sample = 0;
 		//KEYBOARD FUNCTION USING TIMER INTERRUPT
 		if(hps_tim1_int_flag){
 			hps_tim1_int_flag = 0;
@@ -170,7 +173,7 @@ int main() {
 					if (input_key == Volume_DOWN_KEY){amplitude-= 2;}
 				}
 
-				if (input_key == break_code){
+					if (input_key == break_code){
 					read_ps2_data_ASM(data);
 					input_key = *data;
 					//identifying which key was released
@@ -221,7 +224,6 @@ int main() {
 			if(note6_flag){total_sample += amplitude * note6[t_note6 % (int)(sampling_frequency/A_FREQUENCY)];}
 			if(note7_flag){total_sample += amplitude * note7[t_note7 % (int)(sampling_frequency/B_FREQUENCY)];}
 			if(note8_flag){total_sample += amplitude * note8[t_note8 % (int)(sampling_frequency/C2_FREQUENCY)];}
-			//printf("%d,\n",total_sample);
 			if(audio_write_data_ASM(total_sample, total_sample)){
 				if(note1_flag){t_note1++;}
 				if(note2_flag){t_note2++;}
@@ -231,25 +233,30 @@ int main() {
 				if(note6_flag){t_note6++;}
 				if(note7_flag){t_note7++;}
 				if(note8_flag){t_note8++;}
-				VGA_x++;
+				
+				if (!array_full){
+					VGA_Y[Y_count] = VGA_Base_Y + (total_sample/800000);
+					Y_count++;
+				}
+				if (Y_count == 320){
+					array_full = 1;
+					Y_count = 0;
+				}
 			}
-			
 		}
-		
-
 
 		//VGA USING TIMER INTERRUPT
 		if(hps_tim2_int_flag){
 			hps_tim2_int_flag = 0;
-			//for(i = 0;i < 320; i++){
-			if(VGA_x == 320){VGA_x = 0;}
-			VGA_y = VGA_base_y + total_sample;
-			VGA_draw_point_ASM(VGA_x,VGA_y,0xFFFF);
-				//VGA_draw_point_ASM(j,something, something);
+			if (array_full){
+				for(VGA_X = 0; VGA_X < 320; VGA_X++){	
+					VGA_draw_point_ASM(VGA_X,VGA_prev[VGA_X],0x0);			
+					VGA_draw_point_ASM(VGA_X,VGA_Y[VGA_X],0xFFFF);
+					VGA_prev[VGA_X] = VGA_Y[VGA_X];	
+				}
+				array_full = 0;
+			}	
 		}
-
-		total_sample = 0;
-		
 	}
 	return 0;
 }
