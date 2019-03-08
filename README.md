@@ -6,7 +6,7 @@ This reopository contains the laboratory projects done for the course ECSE 324, 
 
 Lab experiments were done using an ARM processor on an Altera DE1-SoC single board computer. The FPGA chip on the DE1-SoC has an ARM processor in was programmed.
 
-Lab 1 - 
+* **Lab 1** - 
 
 ## Built With
 
@@ -15,7 +15,8 @@ Lab 1 -
 * [Visual Studio Code](https://code.visualstudio.com/) - The source code editor
 * [Docker](https://www.docker.com/) - The software used for operating-system-level virtualization
 * [Altera DE1-SoC](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836) - The development kit used
-![Altera DE1-SoC](https://www.terasic.com.tw/attachment/archive/870/image/DE1-SoC_top45_01.jpg)
+
+![Altera DE1-SoC](https://github.com/ismailfaruk/ECSE324--Computer-Organization/blob/master/Altera%20DE1-SoC.jpg)
 ## Authors
 
 * [**Ismail Faruk**](https://github.com/ismailfaruk)
