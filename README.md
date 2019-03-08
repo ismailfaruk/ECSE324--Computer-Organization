@@ -17,6 +17,7 @@ Lab experiments were done using an ARM processor on an Altera DE1-SoC single boa
 * [Altera DE1-SoC](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836) - The development kit used
 
 ![Altera DE1-SoC](https://github.com/ismailfaruk/ECSE324--Computer-Organization/blob/master/Altera%20DE1-SoC.jpg)
+
 ## Authors
 
 * [**Ismail Faruk**](https://github.com/ismailfaruk)
