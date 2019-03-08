@@ -4,8 +4,9 @@ This reopository contains the laboratory projects done for the course ECSE 324, 
 
 ## Description
 
-Lab 1 - Process Management and Tiny Shell - Involved building a tiny shell to mimic a shell with running processes using Fork, Clone, VClone and FIFO, using assigned flags when running the shell.
+Lab experiments were done using an ARM processor on an Altera DE1-SoC single board computer. The FPGA chip on the DE1-SoC has an ARM processor in was programmed.
 
+Lab 1 - Process Management and Tiny Shell - Involved building a tiny shell to mimic a shell with running processes using Fork, Clone, VClone and FIFO, using assigned flags when running the shell.
 
 ## Built With
 
@@ -13,9 +14,10 @@ Lab 1 - Process Management and Tiny Shell - Involved building a tiny shell to mi
 * [ARMx86 Assembly](https://www.ubuntu.com/) - The Linux Distro used for deployment and testing
 * [Visual Studio Code](https://code.visualstudio.com/) - The source code editor
 * [Docker](https://www.docker.com/) - The software used for operating-system-level virtualization
+* [Altera DE1-SoC](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836) - The development kit used
 
 ## Authors
 
-* **Ismail Faruk**
+* [**Ismail Faruk**](https://github.com/ismailfaruk)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details]
