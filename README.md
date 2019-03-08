@@ -16,9 +16,24 @@ Lab 1 - Process Management and Tiny Shell - Involved building a tiny shell to mi
 * [Docker](https://www.docker.com/) - The software used for operating-system-level virtualization
 * [Altera DE1-SoC](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836) - The development kit used
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ![Altera DE1-SoC](https://www.terasic.com.tw/attachment/archive/870/image/DE1-SoC_top45_01.jpg)
 ## Authors
 
 * [**Ismail Faruk**](https://github.com/ismailfaruk)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
