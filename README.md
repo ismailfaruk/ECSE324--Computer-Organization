@@ -6,7 +6,18 @@ This reopository contains the laboratory projects done for the course ECSE 324, 
 
 Lab experiments were done using an ARM processor on an Altera DE1-SoC single board computer. The FPGA chip on the DE1-SoC has an ARM processor in was programmed.
 
-* **Lab 1** - 
+* **G39_Lab0** - Warmup
+
+*	**G39_Lab1** - Introduction to ARM Programming
+
+*	**G39_Lab2** - Stacks, Subroutines, and C 
+
+*	**G39_Lab3** - Basic IO, Timers and Interrupts
+
+*	**G39_Lab4** - High level IO - VGA, PS2 Keyboard, and Audio
+
+*	**G39_Lab5** - Synthesizer
+
 
 ## Built With
 
