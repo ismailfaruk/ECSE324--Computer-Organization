@@ -16,12 +16,7 @@ Lab experiments were done using an ARM processor on an Altera DE1-SoC single boa
 
 *	**G39_Lab4** - High level IO - VGA, PS2 Keyboard, and Audio - Used the VGA controller to display pixels and characters, used the PS/2 port to accept input from a keyboard and used the audio controller to play generated tones. The application read raw data from the keyboard and displayed it to the screen if it is valid. It uses the PS/2 keyboard and VGA monitor. Also created a driver for the audio port. The driver takes one integer argument and write it to both the left and the write FIFO only if there is space in both the FIFOs. The subroutine returns an integer value of 1 if the data was written to the FIFOs, and return 0 otherwise. It plays a 100 Hz square wave on the audio out port. 
 
-*	**G39_Lab5** - Synthesizer 
-  * Combined the low-level ARM programming techniques acquired in the course by implementing a musical synthesizer. 
-  * Takes as input f and t and returns signal[t]. 
-  * Uses a timer to feed the generated samples to the audio codec periodically. 
-  * Implements a volume control with the keyboard so that the user can turn the volume (amplitude) up or down.
-  * Displays the waveform on the lab computer monitor.
+*	**G39_Lab5** - Synthesizer - Combines the low-level ARM programming techniques acquired in the course and implements a musical synthesizer. Takes as input f and t and returns signal[t]. Uses a timer to feed the generated samples to the audio codec periodically. Implements a volume control with the keyboard so that the user can turn the volume (amplitude) up or down. Displays the waveform on the lab computer monitor.
 
 ## Built With
 
