@@ -8,7 +8,7 @@ Lab experiments were done using an ARM processor on an Altera DE1-SoC single boa
 
 * **G39_Lab0** - Warmup - Flashing the computer system onto the board and running the demo program
 
-*	[**G39_Lab1**(G39_Lab1%20-%20Introduction%20to%20ARM%20Programming/G39_Lab1_Report.pdf) - Introduction to ARM Programming - Fast standard deviation computation, centering an array and sorting in assembly.
+*	[**G39_Lab1**](G39_Lab1%20-%20Introduction%20to%20ARM%20Programming/G39_Lab1_Report.pdf) - Introduction to ARM Programming - Fast standard deviation computation, centering an array and sorting in assembly.
 
 *	[**G39_Lab2**](G39_Lab2%20-%20Stacks%2C%20Subroutines%2C%20and%20C/G39_Lab2_Report.pdf) - Stacks, Subroutines, and C - Fibonacci calculation using recursive subroutine calls, implementing stack. Computes the maximum of two numbers and returns the result.
 
