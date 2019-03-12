@@ -21,7 +21,7 @@ Lab experiments were done using an ARM processor on an Altera DE1-SoC single boa
 ## Built With
 
 * [C](https://en.wikipedia.org/wiki/C_(programming_language)) - The programming language used
-* [ARMx86 Assembly](https://www.ubuntu.com/) - The Linux Distro used for deployment and testing
+* [ARMx86 Assembly](https://en.wikipedia.org/wiki/Assembly_(programming)) - The assembly language used for subroutines
 * [Visual Studio Code](https://code.visualstudio.com/) - The source code editor
 * [Altera DE1-SoC](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836) - The development kit used
 * [ARM Cortex-A9](https://en.wikipedia.org/wiki/ARM_Cortex-A9) - The core programmed
